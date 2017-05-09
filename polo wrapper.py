@@ -10,6 +10,8 @@
 # trading along a line is a common thing in technical analysis of price markets
 # this supposedly lets you do it automatically
 
+# polo's servers are so crappy it'd be faster for them to trade by physically mailing crypto paper wallets to and from their office instead
+
 # TODO:
 # market buy when price moves above a line
 # market sell when price moves below a line
@@ -55,14 +57,26 @@ def buy(currency, rate, amount):
         print 'Placed buy order for', amount, currency, 'at', rate
         return order['orderNumber']
     else:
+        print order
+        return False
+
+def sell(currency, rate, amount):
+    order = query('sell', {'currencyPair': 'BTC_'+currency, 'rate': rate, 'amount': amount})
+    if 'orderNumber' in order:
+        print 'Placed sell order for', amount, currency, 'at', rate
+        return order['orderNumber']
+    else:
+        print order
         return False
 
 def cancel(ordernumber):
     thingy = query('cancelOrder', {'orderNumber': ordernumber})
-    if thingy[success]==1:
+    if thingy['success']==1:
         print 'Successfully cancelled order', ordernumber
+        return True
     else:
         print thingy
+        return False
 
 def move(ordernumber, rate):
     thing = query('moveOrder', {'orderNumber': ordernumber, 'rate': rate})
@@ -133,3 +147,7 @@ Invalid order number, or you are not the person who placed the order.
 order got filled (yay?) or there was an error. I don't know which
 >>>
 """
+
+# i sold 32000 gamecredits in 2014 for 0.06btc (about £15 back then)
+# today they'd be worth about 20btc (about £27000)
+# i hate this game
