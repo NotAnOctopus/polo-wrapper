@@ -151,3 +151,24 @@ order got filled (yay?) or there was an error. I don't know which
 # i sold 32000 gamecredits in 2014 for 0.06btc (about £15 back then)
 # today they'd be worth about 20btc (about £27000)
 # i hate this game
+
+# it's 2018, it's been months since i last touched this
+
+# you know when you're selling bitcoins at 12000 $/btc and then some fuckface of a bot puts their limit sell in at $11999.99999999 and then attracts tons of other bots who put their limit orders right below that?
+# since poloniex has no hidden order capability, if you don't want to be humiliated like this and have your order barely missed or partly filled (I FUCKING HATE IT WHEN THEY GET PARTLY FILLED) the only option is to join them
+# like this
+# sells alts to btc only
+
+def robotic_limit_sell(currency, amount, depth): # amount in altcoin you're selling for btc
+    orderbook = query('returnOrderBook', {'currencyPair' :'BTC_'+currency})
+    asks = orderbook[asks]
+    totaldepth = 0
+    thing = 0
+    try:
+        while totaldepth <= depth:
+            totaldepth += asks[thing][1]
+            thing += 1
+        sell(currency, float(asks[thing-1][0])-10**-8, amount)
+        return True
+    except IndexError:
+        print "orderbook depth out of range"
